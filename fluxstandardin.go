@@ -21,6 +21,7 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"github.com/DrItanium/neuron"
@@ -54,7 +55,8 @@ func main() {
 			log.Fatal(err)
 		}
 		go func(c net.Conn) {
-			a := make([]byte, 1)
+			a := make([]byte, 80)
+			var b bytes.Buffer
 			for {
 				if !neuron.IsRunning() {
 					break
@@ -68,10 +70,11 @@ func main() {
 					}
 				}
 
-				if result == 1 {
-					fmt.Printf("%c", a[0])
-				} else {
+				if result == 0 {
 					break
+				} else {
+					b.Write(a)
+					b.WriteTo(os.Stdout)
 				}
 			}
 			/*
