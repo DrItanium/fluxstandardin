@@ -32,10 +32,14 @@ import (
 )
 
 var portNumber = flag.Uint("port", 2000, "the port number to listen on")
+var readRate = flag.Uint("readRate", 80, "the number of bytes to read at a time")
 
 func main() {
-	terminator := make(chan bool, 1)
 	flag.Parse()
+	if *readRate == 0 {
+		log.Fatal("Read rate must be greater than zero!")
+	}
+	terminator := make(chan bool, 1)
 	// setup the port
 	str := fmt.Sprintf(":%d", *portNumber)
 	l, err := net.Listen("tcp", str)
@@ -55,7 +59,7 @@ func main() {
 			log.Fatal(err)
 		}
 		go func(c net.Conn) {
-			a := make([]byte, 80)
+			a := make([]byte, *readRate)
 			var b bytes.Buffer
 			for {
 				if !neuron.IsRunning() {
