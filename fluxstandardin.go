@@ -21,11 +21,9 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
 	"github.com/DrItanium/neuron"
-	"io"
 	"log"
 	"net"
 	"os"
